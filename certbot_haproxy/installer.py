@@ -247,7 +247,7 @@ class HAProxyInstaller(common.Plugin):
 
         # Check that a supported version of HAProxy is installed.
         version_cmd = constants.os_constant("version_cmd")
-        output = subprocess.check_output(version_cmd)
+        output = subprocess.check_output(version_cmd).decode('utf-8')
         matches = re.match(
             r'HA-Proxy version'
             r' (?P<version>[0-9]{1,4}\.[0-9]{1,4}\.[0-9a-z]{1,10}).*',
@@ -472,7 +472,8 @@ class HAProxyInstaller(common.Plugin):
             path = os.path.dirname(os.path.abspath(filepath))
             if not os.path.exists(path):
                 os.makedirs(path)
-
+            if isinstance(contents, bytes):
+                contents = contents.decode('utf-8')
             with open(filepath, 'w') as cert:
                 cert.write(contents)
         self.new_crt_files = {}

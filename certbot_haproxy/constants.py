@@ -99,6 +99,18 @@ CLI_DEFAULTS_RHEL_BASED_SYSTEMD_OS = dict(
     crt_directory='/opt/certbot/haproxy_fullchains',
 )
 
+CLI_DEFAULTS_GENTOO_BASED_SYSTEMD_OS = dict(
+    service_manager='/sbin/service',
+    version_cmd=['/usr/bin/haproxy', '-v'],
+    restart_cmd=['sudo', '/etc/init.d/haproxy', 'restart'],
+    # Needs the config file as an argument:
+    conftest_cmd=['/usr/bin/haproxy', '-c', '-f'],
+    haproxy_config='/etc/haproxy/haproxy.cfg',
+    # Needs to be writeable by the user that will run certbot
+    crt_directory='/opt/certbot/haproxy_fullchains',
+)
+
+
 CLI_DEFAULTS = {
     "debian": {
         '_min_version': '7',
@@ -118,7 +130,12 @@ CLI_DEFAULTS = {
     "centos": {
         '_min_version': '7',
         '7': CLI_DEFAULTS_RHEL_BASED_SYSTEMD_OS
-    }
+    },
+    "gentoo": {
+        '_min_version': '0',
+        '_max_version': '999999',
+        '': CLI_DEFAULTS_GENTOO_BASED_SYSTEMD_OS
+    },
 }
 
 logger = logging.getLogger(__name__)  # pylint:disable=invalid-name
